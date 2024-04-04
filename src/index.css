@@ -5,7 +5,7 @@
   --color-light: #f1f3f5;
 
   --color-theme: #1098ad;
-  --color-accent: #ffa94d;
+  --color-accent: #e91919;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Codystar&display=swap");
@@ -168,7 +168,7 @@ progress {
 }
 
 .answer {
-  transform: translateX(2rem);
+  transform: translateX(3rem);
 }
 
 .result {

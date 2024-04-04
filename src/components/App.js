@@ -1,4 +1,4 @@
-import { act } from "react-dom/test-utils";
+import { React } from "react-dom/test-utils";
 import DateCounter from "./DateCounter";
 import Header from "./Header";
 import Main from "./Main";
@@ -10,7 +10,9 @@ import Question from "./Question";
 const initialState = {
   questions: [],
   status: "loading",
-  index: 0
+  index: 0, 
+  answer: null,
+  points: 0
 };
 
 function reducer(state, action) {
@@ -31,12 +33,21 @@ function reducer(state, action) {
         ...state,
         status: "active"
       }
+    case "newAnswer":
+      const currentQuestion = state.questions.at(state.index);
+      return {
+       
+        ...state,
+        answer: action.payload,
+        points: action.payload === currentQuestion.correctOption ? state.points + currentQuestion.points : state.points
+
+      }
     default:
       throw new Error("Action Unkown");
   }
 }
 export default function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index, answer}, dispatch] = useReducer(reducer, initialState);
   const numQuestions = questions.length;
   useEffect(function () {
     fetch("http://localhost:9000/questions")
@@ -53,8 +64,8 @@ export default function App() {
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
         {status === "ready" && <StartScreen questions={numQuestions} dispatch={dispatch}/>}
-        {status === "active" && <Question question={questions[0]}/>}
+        {status === "active" && <Question question={questions[index]} answer={answer} dispatch={dispatch}/>}
       </Main>
     </div>
-  );
+  ); 
 }
